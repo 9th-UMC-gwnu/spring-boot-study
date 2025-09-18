@@ -183,6 +183,7 @@ ON users (name, email);
 # 미션
 
 ## 설계한 ERD
+<img width="1181" height="888" alt="스크린샷 2025-09-18 20 40 30" src="https://github.com/user-attachments/assets/5b4f3d0e-9c04-4673-94c6-d2b607fe0c45" />
 
 ## DDL 작성
 ```sql
