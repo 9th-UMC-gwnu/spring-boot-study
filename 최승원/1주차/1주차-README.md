@@ -1,3 +1,94 @@
+# 실습을 위한 로컬 docker-compose 설정
+```yaml
+services:
+  mysql-db:
+    image: mysql:8.0
+    container_name: {CONTAINER_NAME}
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      TZ: 'Asia/Seoul'
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./data:/var/lib/mysql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 1s
+      retries: 5
+```
+
+# 요구 사항에 따른 쿼리문 작성
+
+## 1번
+
+### 요구 사항
+> 성공 점수가 500 포인트 이상인 미션을 조회하고싶어요!
+
+### 쿼리문
+```sql
+SELECT * FROM mission WHERE point >= 500;
+```
+
+---
+
+## 2번(join 사용)
+
+### 요구 사항
+> 안암동의 미션들을 조회하고 싶어요!
+
+### 쿼리문
+```sql
+SELECT * FROM mission    
+LEFT JOIN store ON mission.store_id = store.store.id  
+LEFT JOIN location ON store.location_id = location.location.id    
+WHERE location.name = '안암동';
+```
+
+---
+
+## 3번(서브 쿼리 사용)
+
+### 요구 사항
+> 별점이 3 이상인 리뷰 사진 URL들을 조회하고 싶어요!!
+
+### 쿼리문(서브 쿼리 사용)
+```sql
+SELECT photo_url FROM review_photo as rp  
+WHERE rp.review_id IN (   
+    SELECT r.id FROM review as r  
+    WHERE r.mission_id = 1    
+);
+```
+
+### 쿼리문(left join 사용)
+```sql
+SELECT photo_url FROM review_photo as rp  
+LEFT JOIN review as r ON rp.review_id = r.review_id   
+WHERE review.star >= 3;
+```
+
+# Join과 Sub query의 차이
+
+- Join은 두 개 이상의 테이블을 결합하는 데 사용된다.
+- 서브 쿼리는 쿼리 내에서 다른 쿼리를 실행하는 데 사용된다.
+- 서브 쿼리는 가독성이 좋지만 성능이 조인에 비해 매우 좋지 않다. 최신 MySQL은 사용자가 서브 쿼리문을 사용하면 자체적으로 조인문으로 변환하여 실행시키도록 업데이트되었다.
+- 조인은 두 테이블의 데이터를 한번만 조회하는 반면에, 서브쿼리는 두 테이블의 데이터를 두번 조회하기 때문에, 조인이 일반적으로 서브쿼리보다 효율적이다.
+
+## 살짝 복잡한 쿼리문 작성해보기
+```sql
+SELECT sum(point) FROM mission    
+LEFT JOIN user_mission ON mission.id = user_mission.mission_id    
+WHERE um.is_complete = 1 AND um.user_id = 1 AND m.deadline >= '2025-09-08';
+```
+
 # 페이징
 
 - 데이터베이스 자체에서 끊어서 가져오는 것을 페이징이라고 한다.
