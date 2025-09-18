@@ -107,8 +107,128 @@ limit 15;
   <img width="482" height="462" src="https://github.com/user-attachments/assets/c8995d26-dd2f-4655-8b83-6141f187c644" /><br>
 
 - 본문
->아래 화면에 대한 쿼리가 아마..시니어 미션 안에 있는 텍스트인 것 같아서
->이것을 만들어보기로 했다.
+>아래 화면에 대한 쿼리가 시니어 미션 안에 있는 데이터베이스 DDL인지 몰라서
+>둘 다 만들어보기로 했다.
+
+## DDL
+```sql
+CREATE TABLE `food` (
+    `food_id`  bigint NOT NULL
+);
+
+CREATE TABLE `user` (
+    `user_id`  bigint NOT NULL,
+    `name` varchar(255)    NOT NULL,
+    `gender`   enum('MALE','FEMALE','NONE')   NULL   COMMENT 'MALE,FEMALE,NONE',
+    `birth`    date   NOT NULL,
+    `address`  enum('지역구')   NULL   COMMENT '지역구',
+    `social_uid`   varchar(255)    NOT NULL   COMMENT 'OAuth UID',
+    `social_type`  enum('KAKAO','NAVER','APPLE','GOOGLE')   NULL   COMMENT 'KAKAO,NAVER,APPLE,GOOGLE',
+    `point`    int    NOT NULL,
+    `email`    varchar(255)    NOT NULL,
+    `phone_number` varchar(20)    NULL   COMMENT '010-xxxx-xxxx',
+    `deleted_at`   timestamp  NULL,
+    `updated_at`   timestamp  NOT NULL   DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE `user_food` (
+    `user_food_id` bigint NOT NULL,
+    `user_id`  bigint NOT NULL,
+    `food_id` bigint NOT NULL
+);
+
+CREATE TABLE `term` (
+    `term_id`  bigint NOT NULL,
+    `name` enum('AGE','SERVICE','PRIVACY','LOCATION','MARKETING')   NULL
+);
+
+CREATE TABLE `user_term` (
+    `user_term_id` bigint NOT NULL,
+    `user_id`  bigint NOT NULL,
+    `term_id` bigint NOT NULL
+);
+
+CREATE TABLE `user_mission` (
+    `user_mission_id`  bigint NOT NULL,
+    `is_complete`  bit(1)    NOT NULL   DEFAULT 0,
+    `mission_id`  bigint NOT NULL,
+    `user_id`  bigint NOT NULL
+);
+
+CREATE TABLE `mission` (
+    `mission_id`   bigint NOT NULL,
+    `deadline` date   NOT NULL,
+    `conditional`  varchar(255)    NOT NULL,
+    `point`    int    NOT NULL,
+    `created_at`   timestamp  NOT NULL,
+    `store_id` bigint NOT NULL
+);
+
+CREATE TABLE `store` (
+    `store_id` bigint NOT NULL,
+    `name` varchar(255)    NOT NULL,
+    `manager_number`   varchar(20) NOT NULL,
+    `detail_address`   varchar(255)    NOT NULL,
+    `location_id`  bigint NOT NULL
+);
+
+CREATE TABLE `location` (
+    `location_id`  bigint NOT NULL,
+    `name` varchar(255)    NOT NULL
+);
+
+CREATE TABLE `review` (
+    `review_id`    bigint NOT NULL,
+    `content`  text   NOT NULL,
+    `created_at`   timestamp  NOT NULL,
+    `star` float  NOT NULL,
+    `user_id`  bigint NOT NULL,
+    `store_id` bigint NOT NULL
+);
+
+CREATE TABLE `review_photo` (
+    `review_photo_id`  bigint NOT NULL,
+    `photo_url`    varchar(255)    NOT NULL,
+    `review_id`    bigint NOT NULL
+);
+
+CREATE TABLE `reply` (
+    `reply_id` bigint NOT NULL,
+    `content`  text   NOT NULL,
+    `review_id`    bigint NOT NULL
+);
+
+-- PK & FK
+
+-- PK 추가
+ALTER TABLE `food` ADD CONSTRAINT `PK_FOOD` PRIMARY KEY (`food_id`);
+ALTER TABLE `user` ADD CONSTRAINT `PK_USER` PRIMARY KEY (`user_id`);
+ALTER TABLE `user_food` ADD CONSTRAINT `PK_USER_FOOD` PRIMARY KEY (`user_food_id`);
+ALTER TABLE `term` ADD CONSTRAINT `PK_TERM` PRIMARY KEY (`term_id`);
+ALTER TABLE `user_term` ADD CONSTRAINT `PK_USER_TERM` PRIMARY KEY (`user_term_id`);
+ALTER TABLE `user_mission` ADD CONSTRAINT `PK_USER_MISSION` PRIMARY KEY (`user_mission_id`);
+ALTER TABLE `mission` ADD CONSTRAINT `PK_MISSION` PRIMARY KEY (`mission_id`);
+ALTER TABLE `store` ADD CONSTRAINT `PK_STORE` PRIMARY KEY (`store_id`);
+ALTER TABLE `location` ADD CONSTRAINT `PK_LOCATION` PRIMARY KEY (`location_id`);
+ALTER TABLE `review` ADD CONSTRAINT `PK_REVIEW` PRIMARY KEY (`review_id`);
+ALTER TABLE `review_photo` ADD CONSTRAINT `PK_REVIEW_PHOTO` PRIMARY KEY (`review_photo_id`);
+ALTER TABLE `reply` ADD CONSTRAINT `PK_REPLY` PRIMARY KEY (`reply_id`);
+
+-- FK 추가
+ALTER TABLE `user_food` ADD CONSTRAINT `FK_USER_FOOD_user_id_TO_USER_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+ALTER TABLE `user_food` ADD CONSTRAINT `FK_USER_FOOD_food_id_TO_FOOD_food_id` FOREIGN KEY (`food_id`) REFERENCES `food` (`food_id`);
+ALTER TABLE `user_term` ADD CONSTRAINT `FK_USER_TERM_user_id_TO_USER_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+ALTER TABLE `user_term` ADD CONSTRAINT `FK_USER_TERM_term_id_TO_TERM_term_id` FOREIGN KEY (`term_id`) REFERENCES `term` (`term_id`);
+ALTER TABLE `user_mission` ADD CONSTRAINT `FK_USER_MISSION_user_id_TO_USER_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+ALTER TABLE `user_mission` ADD CONSTRAINT `FK_USER_MISSION_mission_id_TO_MISSION_mission_id` FOREIGN KEY (`mission_id`) REFERENCES `mission` (`mission_id`);
+ALTER TABLE `mission` ADD CONSTRAINT `FK_MISSION_store_id_TO_STORE_store_id` FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`);
+ALTER TABLE `store` ADD CONSTRAINT `FK_STORE_location_id_TO_LOCATION_location_id` FOREIGN KEY (`location_id`) REFERENCES `location` (`location_id`);
+ALTER TABLE `review` ADD CONSTRAINT `FK_REVIEW_user_id_TO_USER_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+ALTER TABLE `review` ADD CONSTRAINT `FK_REVIEW_store_id_TO_STORE_store_id` FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`);
+ALTER TABLE `review_photo` ADD CONSTRAINT `FK_REVIEW_PHOTO_review_id_TO_REVIEW_review_id` FOREIGN KEY (`review_id`) REFERENCES `review` (`review_id`);
+ALTER TABLE `reply` ADD CONSTRAINT `FK_REPLY_review_id_TO_REVIEW_review_id` FOREIGN KEY (`review_id`) REFERENCES `review` (`review_id`);
+```
+
 ```text
 미션
           500p                            성공
