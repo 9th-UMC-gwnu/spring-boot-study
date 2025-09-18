@@ -47,7 +47,7 @@
 1. 알림은 **공지 관련 알림, 책 반납 시간 임박 알림, 마케팅 알림이 있을 수 있다.**
 
 ## 설계해보기
-<img width="1185" height="826" alt="스크린샷 2025-09-15 13 26 01" src="https://github.com/user-attachments/assets/3e8d7e80-17b1-4cb7-b2dc-fb0bd3148866" />
+<img width="1181" height="888" alt="스크린샷 2025-09-18 20 40 30" src="https://github.com/user-attachments/assets/c3e6d0ad-e125-41d5-bdcc-318c1fcd485d" />
 
 ---
 
