@@ -78,7 +78,7 @@
 ---
 
 ## 미션
-<img width="921" height="626" alt="image" src="https://github.com/user-attachments/assets/0f424c55-777f-46bd-9203-29df4f92d4b2" />
+<img width="1618" height="1118" alt="Image" src="https://github.com/user-attachments/assets/97aa856b-a30f-4564-b8eb-749d52a62874" />
 
 
 ---

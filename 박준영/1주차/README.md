@@ -84,6 +84,191 @@
 
 ---
 
+## 미션
+
+### users테이블
+
+  `CREATE TABLE IF NOT EXISTS USERS`
+
+  `(`
+
+  `user_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,`
+
+  `name VARCHAR(15) NOT NULL COMMENT '이름',`
+
+  `nickname VARCHAR(15) NOT NULL COMMENT '닉네임',`
+
+  `phone_num VARCHAR(11) NOT NULL COMMENT '전화번호',`
+
+  `gender ENUM('F','M') NOT NULL COMMENT '성별',`
+
+  `create_at DATETIME(6) NOT NULL DEFAULT *CURRENT_TIMESTAMP*(6) COMMENT '생성일자',`
+
+  `update_at  DATETIME(6) NOT NULL DEFAULT *CURRENT_TIMESTAMP*(6) ON UPDATE *CURRENT_TIMESTAMP*(6) COMMENT '수정일자',`
+
+  `status ENUM('active', 'inactive') NOT NULL DEFAULT 'active' COMMENT '상태표시',`
+
+  `inactive_at DATETIME DEFAULT NULL COMMENT '비활성화 일자',`
+
+  `count INT NOT NULL DEFAULT 0 COMMENT '해결한 미션 수',`
+
+  `point INT NOT NULL DEFAULT 0 COMMENT '보유 포인트',`
+
+  `like_food VARCHAR(10) NOT NULL COMMENT '선호 음식'`
+
+  `);`
+
+### missions 테이블
+
+  `CREATE TABLE IF NOT EXISTS missions`
+
+  `(`
+
+  `mission_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,`
+
+  `name VARCHAR(15) NOT NULL COMMENT '미션 이름',`
+
+  `create_at DATETIME(6) NOT NULL DEFAULT *CURRENT_TIMESTAMP*(6) COMMENT '생성일자',`
+
+  `point INT NOT NULL COMMENT '미션 포인트',  shop_id INT NOT NULL`
+
+  `);`
+
+### question 테이블
+
+  `CREATE TABLE IF NOT EXISTS question`
+
+  `(`
+
+  `id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,`
+
+  `title VARCHAR(20) NOT NULL COMMENT '문의 제목',`
+
+  `body TEXT NOT NULL COMMENT '문의 내용',  user_id int NOT NULL`
+
+  `);`
+
+### regions 테이블
+
+  `CREATE TABLE IF NOT EXISTS regions`
+
+  `(`
+
+  `region_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,`
+
+  `name VARCHAR(15) NOT NULL COMMENT '지역 이름'`
+
+  `);`
+
+### review 테이블
+
+  `CREATE TABLE IF NOT EXISTS review`
+
+  `(`
+
+  `review_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,`
+
+  `title VARCHAR(20) NOT NULL COMMENT '리뷰 타이틀',`
+
+  `body TEXT NOT NULL COMMENT '리뷰 내용',`
+
+  `star DOUBLE NOT NULL COMMENT '별점',  user_id INT NOT NULL,`
+
+  `shop_id INT NOT NULL`
+
+  `);`
+
+### shops 테이블
+
+  `CREATE TABLE IF NOT EXISTS shops`
+
+  `(`
+
+  `shop_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,`
+
+  `name INT NOT NULL COMMENT '가게 이름',`
+
+  `region_id INT NOT NULL`
+
+  `);`
+
+### solved_tables 테이블
+
+  `CREATE TABLE IF NOT EXISTS solved_missions`
+
+  `(`
+
+  `solved_id INT NOT NULL PRIMARY KEY  AUTO_INCREMENT,`
+
+  `solved_at DATETIME(6) NOT NULL DEFAULT *CURRENT_TIMESTAMP*(6) COMMENT '해결 일자',`
+
+  `user_id int NOT NULL COMMENT '해결한 유저',`
+
+  `mission_id INT NOT NULL COMMENT '해결한 미션'`
+
+  `);`
+
+### 외래키 연결
+    - solved_missions - users
+
+      `ALTER TABLE solved_missions`
+
+      `ADD CONSTRAINT FK_users_TO_solved_missions`
+
+      `FOREIGN KEY (user_id) REFERENCES users (user_id);`
+
+    - solved_missions - missions
+
+      `ALTER TABLE solved_missions`
+
+      `ADD CONSTRAINT FK_missions_TO_solved_missions`
+
+      `FOREIGN KEY (mission_id) REFERENCES missions (mission_id);`
+
+    - missions - shops
+
+      `ALTER TABLE missions`
+
+      `ADD CONSTRAINT FK_shops_TO_missions`
+
+      `FOREIGN KEY (shop_id) REFERENCES shops (shop_id);`
+
+    - shops - regions
+
+      `ALTER TABLE shops`
+
+      `ADD CONSTRAINT FK_regions_TO_shops`
+
+      `FOREIGN KEY (region_id) REFERENCES regions (region_id);`
+
+    - reviews - users
+
+      `ALTER TABLE review`
+
+      `ADD CONSTRAINT FK_users_TO_review`
+
+      `FOREIGN KEY (user_id) REFERENCES users (user_id);`
+
+    - reviews - shops
+
+      `ALTER TABLE review`
+
+      `ADD CONSTRAINT FK_shops_TO_review`
+
+      `FOREIGN KEY (shop_id) REFERENCES shops (shop_id);`
+
+    - questions - users
+
+      `ALTER TABLE question`
+
+      `ADD CONSTRAINT FK_users_TO_question`
+
+      `FOREIGN KEY (user_id) REFERENCES users (user_id);`
+
+
+
+---
+
 # 학습후기
 - 서브 쿼리는 인지하고 있었지만 Join문에 대해선 잘 모르고 있었는데 이 학습을 통해 서브 쿼리 뿐 만 아니라 Join에 대해 보다 깊이 알 수 있었다.
 - DB에서 페이징이 이루어지는지 학습을 통해 처음 알게 되었고 함수나 연산이 이루어지면 인덱스를 사용하기 어렵다는 사실을 새롭게 알게 되었다.
