@@ -47,6 +47,73 @@
 - Join on과 where의 차이 : Join on은 여러 테이블을 연결할 때 조건으로 특정 기준으로 합치는지 결정하는 것이고 where은 하나의 테이블이나 조인된 결과의 테이블에서 다시 특정 기준으로 필터링해서 특정 데이터만 남긴다.
 
 ---
+# 미션
+## 지역 테이블
+CREATE TABLE location (
+    id bigint NOT NULL PRIMARY KEY,
+    name varchar(10)
+);
+## 유저 테이블
+CREATE TABLE user (
+    id bigint NOT NULL PRIMARY KEY,
+    name varchar(10) NOT NULL,
+    nickname varchar(10),
+    email varchar(20),
+    birth varchar(10),
+    gender ENUM('m', 'w') NOT NULL,
+    point int,
+    created_at datetime,
+    updated_at datetime,
+    inactived_at datetime,
+    status enum('active','inactive') NOT NULL
+);
+## 가게 테이블
+CREATE TABLE store (
+    id bigint NOT NULL PRIMARY KEY,
+    name varchar(20) NOT NULL,
+    information varchar(50),
+    address varchar(30),
+    location_id bigint NOT NULL,
+    CONSTRAINT fk_store_location FOREIGN KEY (location_id) REFERENCES location(id)
+);
+## 미션 테이블
+CREATE TABLE mission (
+    id bigint NOT NULL PRIMARY KEY,
+    details varchar(50),
+    deadline datetime,
+    point int NOT NULL,
+    store_id bigint NOT NULL,
+    CONSTRAINT fk_mission_store FOREIGN KEY (store_id) REFERENCES store(id)
+);
+## 리뷰 테이블
+CREATE TABLE review (
+    id bigint NOT NULL PRIMARY KEY,
+    content text,
+    star float NULL,
+    created_at datetime,
+    user_id bigint NOT NULL,
+    store_id bigint NOT NULL,
+    CONSTRAINT fk_review_user FOREIGN KEY (user_id) REFERENCES user(id),
+    CONSTRAINT fk_review_store FOREIGN KEY (store_id) REFERENCES store(id)
+);
+## 유저 미션 테이블
+CREATE TABLE user_mission (
+    id bigint NOT NULL PRIMARY KEY,
+    is_success boolean,
+    mission_id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    CONSTRAINT fk_user_mission_mission FOREIGN KEY (mission_id) REFERENCES mission(id),
+    CONSTRAINT fk_user_mission_user FOREIGN KEY (user_id) REFERENCES user(id)
+);
+## 선호 지역 테이블
+CREATE TABLE location_likes (
+    location_id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    PRIMARY KEY (location_id, user_id),
+    CONSTRAINT fk_location_likes_location FOREIGN KEY (location_id) REFERENCES location(id),
+    CONSTRAINT fk_location_likes_user FOREIGN KEY (user_id) REFERENCES user(id)
+);
+
 # 학습후기
 - 조인과 서브쿼리의 차이를 잘 이해하지 못했는데 성능차이와 가독성차이가 있다는 것을 알게 되었고, mysql에서 서브쿼리를 쓰면 자동으로 조인으로 바꿔준다는 것도 처음알았다.
 - 페이징은 오프셋 페이징말고도 더 좋은 커서 페이징이 있다는 것을 배웠고, 실제로 어떻게 작성하는지 이해했다.
