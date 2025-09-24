@@ -6,7 +6,7 @@
 - [짭상혁/김상혁](https://github.com/9th-UMC-gwnu/spring-boot-study/tree/main/김상혁)
 - [와드/박성웅](https://github.com/9th-UMC-gwnu/spring-boot-study/tree/main/박성웅)
 - [조별과제/장원영](https://github.com/9th-UMC-gwnu/spring-boot-study/tree/main/장원영)
-- [길/길영진]()
+- [길/길영진](https://github.com/9th-UMC-gwnu/spring-boot-study/tree/main/길영진)
 
 ## 📖 규칙
 - 업로드 기한: 매주 **수요일 자정까지**
