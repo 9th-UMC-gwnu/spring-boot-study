@@ -176,3 +176,104 @@ public class MemberService {
 # 학습 후기
 
 - 스프링 프레임워크라는 큰 숲을 멀리서 관찰한 느낌이다. 기존 공부 방식은 작은 나무 하나하나를 자세히 들여다보는 방식이었다면, 이번 주차는 전체적인 구조와 흐름을 이해하는 데 중점을 둔 것 같다. 앞으로 각 개념들을 더 깊이 파고들면서, 이 큰 그림 속에서 어떻게 작동하는지 알아가는 과정이 기대된다.
+
+# 시니어 미션
+
+## 전통적인 서블릿 기반 개발과 Spring MVC의 차이
+
+### 전통적인 서블릿 기반 개발
+
+- HttpServlet을 직접 상속받아 doGet, doPost 메서드 오버라이딩.
+- 클라이언트 요청 → 서블릿 매핑(URL 기반) → 코드 안에서 요청 파라미터 처리 → 비즈니스 로직 실행 → 응답 작성(HTML, JSON, JSP forward 등).
+- 개발자가 **요청/응답 객체(HttpServletRequest, HttpServletResponse)**를 직접 다룸.
+- View로 이동할 때도 RequestDispatcher.forward() 같은 저수준 API를 직접 호출.
+
+### Spring MVC
+
+- Front Controller 패턴을 적용한 DispatcherServlet이 진입점.
+- 모든 요청을 DispatcherServlet이 먼저 받고, 이후 적절한 Controller(핸들러)로 위임.
+- 컨트롤러 메서드는 단순히 파라미터를 선언하면 자동으로 매핑 (@RequestParam, @ModelAttribute, @RequestBody 등).
+- 결과는 Model + View 이름만 반환하면, ViewResolver가 알맞은 뷰(JSP, Thymeleaf 등)를 찾아 렌더링.
+- AOP 기반으로 공통 기능(예외 처리, 로깅, 인증/인가)을 쉽게 분리 가능.
+
+### 전통적인 서블릿 기반 개발의 어려움
+
+1. 저수준 작업 부담
+   - 모든 요청/응답 처리, 파라미터 추출, 예외 처리, 뷰 렌더링 등을 개발자가 직접 구현해야 함.
+2. 관심사 혼재
+   - 비즈니스 로직, 요청 처리, 응답 작성이 한 클래스/메서드 안에 섞임.
+3. 재사용/확장 어려움
+   - 로깅, 인증/인가, 공통 예외 처리 등을 재사용 가능한 구조로 만들기 어려움.
+4. 코드 중복
+   - 여러 서블릿에서 반복되는 코드를 줄이기 힘듦.
+
+### Spring MVC가 해결하는 문제점
+
+1. Front Controller 패턴
+2. 요청 파라미터 바인딩 자동화
+3. 뷰 처리 추상화
+4. 공통 관심사 처리
+5. 생산성 & 유지보수성 향상
+
+### DispatcherServlet이 내부적으로 요청을 처리하는 방식 단계별 분석. (키워드: HandlerMapping, HandlerAdpater, Intercepter) 다이어그램을 그려서 단계별로 설명하기
+
+![스크린샷 2025-09-24 17.08.05.png](/Users/seungwon-choi/Desktop/스크린샷 2025-09-24 17.08.05.png)
+
+1. 요청 진입
+2. Handler Mapping 조회
+3. Handler Adapter 실행
+4. Controller 내 비즈니스 로직 수행
+5. 뷰 리졸버에게 뷰 반환
+6. 클라이언트에게 응답 반환
+
+## AOP(Aspect-Oriented Programming) 원리 탐구
+
+### OOP와 AOP의 차이점 분석.
+
+| **구분** | **OOP (객체지향)** | **AOP (관점지향)** |
+| --- | --- | --- |
+| 관점 | 객체 단위 | 관심사 단위 |
+| 책임 분리 | 클래스/객체 단위 | 공통 관심사 단위 |
+| 장점 | 구조적 캡슐화 | 중복 코드 제거, 유지보수 편리 |
+| 예시 | UserService, OrderService 등 클래스 중심 | 로깅, 트랜잭션, 보안 검사 등 핵심 로직과 분리 |
+
+### AOP의 핵심 개념(Advice, JoinPoint, Pointcut, Aspect, Weaving) 정리.
+
+- Aspect: 공통 관심사를 모듈화한 단위(클래스 단위)
+- Advice: Aspect가 실제 수행하는 행동(메서드 단위)
+- JoinPoint: Advice가 적용될 수 있는 프로그램 실행 지점
+- Pointcut: JoinPoint 중에서 Advice를 적용할 위치를 지정
+- Weaving: Aspect와 핵심 로직을 결합하는 과정
+
+### AOP가 적용되는 런타임 위빙 vs 컴파일 타임 위빙의 차이점 조사.
+
+| **구분** | **컴파일 타임 위빙** | **런타임 위빙 (Spring AOP 기본)** |
+| --- | --- | --- |
+| **시점** | 소스코드 컴파일 시 | 애플리케이션 실행 시점(프록시) |
+| **대상** | 모든 메서드/클래스 | Spring 빈 객체, 프록시 대상 |
+| **구현 방식** | AspectJ 컴파일러 사용 | JDK Dynamic Proxy, CGLIB |
+| **장점** | 빠른 실행, 완전 통합 | 유연, Spring 환경과 통합 용이 |
+| **단점** | 유연성 떨어짐, Spring 통합 어려움 | 일부 제한 (OOP 클래스 내부 호출 시 적용 안 됨) |
+
+### 어노테이션이 작동되는 방식을 Spring AOP를 중심으로 조사.
+
+1. **어노테이션 정의**
+    - 예: @Transactional, @Aspect, @Before, @After 등
+2. **빈 생성 시점**
+    - Spring IoC 컨테이너가 빈을 생성할 때, **프록시 객체(proxy)를 생성**한다.
+    - 프록시는 핵심 객체를 감싸서 호출 전/후에 Advice를 삽입할 수 있도록 만든다.
+3. **메서드 호출 시점**
+    - 클라이언트가 컨트롤러/서비스 메서드를 호출하면 실제 호출은 **프록시**를 통해 전달.
+    - 프록시 내부에서 **Pointcut 확인 → JoinPoint 매칭 → Advice 실행 → 실제 메서드 호출** 순으로 진행.
+4. **실행 완료 후**
+    - AfterAdvice 등 필요한 Advice 실행 → 최종 반환.
+
+### Spring에서 AOP가 프록시 패턴(Proxy Pattern)을 활용하여 동작하는 원리 분석.
+
+- Spring AOP는 런타임 위빙을 위해 **프록시 객체**를 사용한다.
+    1. **빈 생성 시점**
+        - Spring IoC 컨테이너가 Bean을 생성할 때, AOP 적용 대상이면 **핵심 객체 대신 프록시 객체**를 등록.
+        - 핵심 객체는 그대로 두고, 프록시가 모든 메서드 호출을 가로챈다.
+    2. **클라이언트 호출**
+        - 클라이언트가 서비스 메서드를 호출하면 실제 호출은 프록시를 통해 전달.
+        - 프록시는 **Advice 실행 → 핵심 메서드 호출 → 후처리 Advice 실행** 순으로 동작.
