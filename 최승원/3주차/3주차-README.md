@@ -85,3 +85,67 @@
 ## Request Header
 
 - 전송에 관련된 기타 정보들이 담기는 부분
+
+# 학습 후기
+
+- REST API에 대한 전반적인 개념과 설계 방법에 대해 알게 되었다.
+- URI, URL, URN의 차이점에 대해 명확히 알게 되었다.
+- Path variable, Query String, Request Body, Request Header의 사용법에 대해 이해하게 되었다.
+
+# 미션
+
+## 홈 화면
+
+- GET /api/v1/home
+- Authorization: Bearer {accessToken}
+
+Response Body
+```json
+{
+  "success": true,
+  "message": "홈 화면 조회 성공",
+  "data": {
+    "locations": "안암동",
+    "myPoint": 999999,
+    "successMissionCount": 7,
+    "myMissions": [
+      {
+        "missionId": 1,
+        "storeName": "반이학생마라탕",
+        "storeCategory": "중식당",
+        "missionTitle": "10000원 이상의 식사",
+        "missionDate": "2025-09-20",
+        "missionStatus": "COMPLETED",
+        "point": 500
+      },
+      {
+        "missionId": 2,
+        "storeName": "반이학생마라탕",
+        "storeCategory": "중식당",
+        "missionTitle": "10000원 이상의 식사",
+        "missionDate": "2025-09-20",
+        "missionStatus": "COMPLETED",
+        "point": 500
+      },
+      {
+        "missionId": 3,
+        "storeName": "반이학생마라탕",
+        "storeCategory": "중식당",
+        "missionTitle": "10000원 이상의 식사",
+        "missionDate": "2025-09-20",
+        "missionStatus": "COMPLETED",
+        "point": 500
+      },
+      {
+        "missionId": 4,
+        "storeName": "반이학생마라탕",
+        "storeCategory": "중식당",
+        "missionTitle": "10000원 이상의 식사",
+        "missionDate": "2025-09-20",
+        "missionStatus": "COMPLETED",
+        "point": 500
+      }
+    ]
+  }
+}
+```
