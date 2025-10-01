@@ -94,10 +94,11 @@
 
 # 미션
 
-## 홈 화면
+## 홈 화면(페이징 고려 X)
 
 - GET /api/v1/home
 - Authorization: Bearer {accessToken}
+- Content-Type: application/json
 
 Response Body
 ```json
@@ -115,7 +116,7 @@ Response Body
         "storeCategory": "중식당",
         "missionTitle": "10000원 이상의 식사",
         "missionDate": "2025-09-20",
-        "missionStatus": "COMPLETED",
+        "missionStatus": "IN_PROGRESS",
         "point": 500
       },
       {
@@ -124,7 +125,7 @@ Response Body
         "storeCategory": "중식당",
         "missionTitle": "10000원 이상의 식사",
         "missionDate": "2025-09-20",
-        "missionStatus": "COMPLETED",
+        "missionStatus": "IN_PROGRESS",
         "point": 500
       },
       {
@@ -133,7 +134,7 @@ Response Body
         "storeCategory": "중식당",
         "missionTitle": "10000원 이상의 식사",
         "missionDate": "2025-09-20",
-        "missionStatus": "COMPLETED",
+        "missionStatus": "IN_PROGRESS",
         "point": 500
       },
       {
@@ -142,10 +143,182 @@ Response Body
         "storeCategory": "중식당",
         "missionTitle": "10000원 이상의 식사",
         "missionDate": "2025-09-20",
-        "missionStatus": "COMPLETED",
+        "missionStatus": "IN_PROGRESS",
         "point": 500
       }
     ]
   }
+}
+```
+
+## 마이 페이지
+
+- GET /api/v1/users/me
+- Authorization: Bearer {accessToken}
+- Content-Type: application/json
+
+Response Body
+```json
+{
+  "success": true,
+  "message": "마이 페이지 조회 성공",
+  "data": {
+    "nickname": "nickname012",
+    "email": "dlapadlf@naver.com",
+    "phoneNum": "010-1111-2222",
+    "myPoint": 2500
+  }
+}
+```
+
+
+## 리뷰 작성
+
+- POST /api/v1/missions/{missionId}/reviews
+- Authorization: Bearer {accessToken}
+- Content-Type: multipart/form-data
+
+Request Body
+```json
+{
+  "star": 5,
+  "content": "너무 맛있어요!",
+  "photo": [image_file]
+}
+```
+
+## 진행 중인 미션 목록 조회(페이징 고려 X)
+
+- GET /api/v1/missions?status=IN_PROGRESS
+- Authorization: Bearer {accessToken}
+- Content-Type: application/json
+
+Response Body
+```json
+{
+    "success": true,
+    "message": "진행 중인 미션 목록 조회 성공",
+    "data": [
+        {
+        "missionId": 1,
+        "storeName": "반이학생마라탕",
+        "storeCategory": "중식당",
+        "missionTitle": "10000원 이상의 식사",
+        "missionDate": "2025-09-20",
+        "missionStatus": "IN_PROGRESS",
+        "point": 500
+        },
+        {
+        "missionId": 2,
+        "storeName": "반이학생마라탕",
+        "storeCategory": "중식당",
+        "missionTitle": "10000원 이상의 식사",
+        "missionDate": "2025-09-20",
+        "missionStatus": "IN_PROGRESS",
+        "point": 500
+        },
+        {
+        "missionId": 3,
+        "storeName": "반이학생마라탕",
+        "storeCategory": "중식당",
+        "missionTitle": "10000원 이상의 식사",
+        "missionDate": "2025-09-20",
+        "missionStatus": "IN_PROGRESS",
+        "point": 500
+        },
+        {
+        "missionId": 4,
+        "storeName": "반이학생마라탕",
+        "storeCategory": "중식당",
+        "missionTitle": "10000원 이상의 식사",
+        "missionDate": "2025-09-20",
+        "missionStatus": "IN_PROGRESS",
+        "point": 500
+        }
+    ]
+}
+```
+
+## 진행 완료한 미션 목록 조회(페이징 고려 X)
+
+- GET /api/v1/missions?status=COMPLETED
+- Authorization: Bearer {accessToken}
+- Content-Type: application/json
+
+Response Body
+```json
+{
+    "success": true,
+    "message": "진행 완료한 미션 목록 조회 성공",
+    "data": [
+        {
+        "missionId": 5,
+        "storeName": "반이학생마라탕",
+        "storeCategory": "중식당",
+        "missionTitle": "10000원 이상의 식사",
+        "missionDate": "2025-09-15",
+        "missionStatus": "COMPLETED",
+        "point": 500
+        },
+        {
+        "missionId": 6,
+        "storeName": "반이학생마라탕",
+        "storeCategory": "중식당",
+        "missionTitle": "10000원 이상의 식사",
+        "missionDate": "2025-09-10",
+        "missionStatus": "COMPLETED",
+        "point": 500
+        },
+        {
+        "missionId": 7,
+        "storeName": "반이학생마라탕",
+        "storeCategory": "중식당",
+        "missionTitle": "10000원 이상의 식사",
+        "missionDate": "2025-09-05",
+        "missionStatus": "COMPLETED",
+        "point": 500
+        },
+        {
+        "missionId": 8,
+        "storeName": "반이학생마라탕",
+        "storeCategory": "중식당",
+        "missionTitle": "10000원 이상의 식사",
+        "missionDate": "2025-09-01",
+        "missionStatus": "COMPLETED",
+        "point": 500
+        }
+    ]
+}
+```
+
+## 미션 성공 누르기
+
+- POST /api/v1/missions/{missionId}/complete
+- Authorization: Bearer {accessToken}
+- Content-Type: application/json
+
+Response Body
+```json
+{
+    "success": true,
+    "message": "미션 완료!",
+    "data": {
+      "storeId": 920394810
+    }
+}
+```
+
+## 회원 가입 하기
+
+- POST /api/v1/users/signup
+- Content-Type: application/json
+
+Request Body
+```json
+{
+  "name": "최승원",
+  "gender": "M",
+  "birth": "1999-01-01",
+  "address": "서울시 성북구 안암동"
 }
 ```
