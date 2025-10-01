@@ -244,7 +244,7 @@
   }
 
 ## 회원가입 하기
-- Endpoint: GET /api/users/signup
+- Endpoint: POST /api/users/signup
 - Request Header: Authorization: Bearer <JWT_TOKEN>, Content-Type: application/json
 - Query String : 
 - Response Body : {
