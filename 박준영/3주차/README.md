@@ -104,6 +104,162 @@
 ---
 
 
+# 미션
+
+## 홈 화면
+- Endpoint: GET /api/home
+- Request Header: Authorization: Bearer <JWT_TOKEN>, Content-Type: application/json
+- Query String : ?limit=5 -> 최근 미션 5개만 보기
+  - Response Body : {       -> 보유 미션이 3개라 3개 출력
+    "message": "안녕하세요! 홍길동님",
+    "myMissions": 
+    [
+      { 
+        "mission_id": 1, 
+        "storeName": "명륜진사갈비",
+        "name": "4인 이상 식사하러 가기", 
+        "status": "IN_PROGRESS",
+        "point": 700 
+      },
+      { 
+        "mission_id": 2,
+        "storeName": "금룡", 
+        "name": "1인 1메뉴 주문하기",
+        "status": "COMPLETED",
+        "point": 500 
+      },
+      {
+        "mission_id": 3,
+        "storeName": "좋아회",
+        "name": "매운탕 주문하기",
+        "status": "COMPLETED",
+        "point": 300
+      }
+    ]
+  }
+
+## 마이페이지 
+- Endpoint: GET /api/users/my_profile
+- Request Header
+- Authorization: Bearer <JWT_TOKEN>, Content-Type: application/json
+- Path Variable :
+- Response Body: {
+      "userId": 1,
+      "username": "홍길동",
+      "email": "honggd@gmail.com",
+      "myMissions": [
+        {
+          "mission_id": 1,
+          "storeName": "명륜진사갈비",
+          "name": "4인 이상 식사하러 가기",
+          "status": "IN_PROGRESS",
+          "point": 700
+        },
+        {
+          "mission_id": 2,
+          "storeName": "금룡",
+          "name": "1인 1메뉴 주문하기",
+          "status": "COMPLETED",
+          "point": 500
+        },
+        {
+          "mission_id": 3,
+          "storeName": "좋아회",
+          "name": "매운탕 주문하기",
+          "status": "COMPLETED",
+          "point": 300
+        }
+      ],
+      "reviews": [
+        {
+          "storeName": "금룡",
+          "star" : 5
+          "comment" : "너무 맛있어요 !",
+          "photo": [image_file]
+        }
+      ]
+  }
+
+## 리뷰 작성
+- Endpoint: POST /api/shops/{shop_id}/reviews
+- Request Header: Authorization: Bearer <JWT_TOKEN>, Content-Type: application/json
+- Query String :  
+  - Request Body : {
+      "storeName": "금룡",
+      "star" : 5
+      "comment" : "너무 맛있어요 !",
+      "photo": [image_file]
+  }
+
+## 미션 목록 조회(진행중)
+- Endpoint: GET /api/users/{user_id}/missions
+- Request Header: Authorization: Bearer <JWT_TOKEN>, Content-Type: application/json
+- Query String : ?status= IN_PROGRESS
+  - Response Body : {
+    "myMissions":
+    [
+      {
+        "mission_id": 1,
+        "storeName": "명륜진사갈비",
+        "name": "4인 이상 식사하러 가기",
+        "status": "IN_PROGRESS",
+        "point": 700
+      }
+    ]
+  }
+
+## 미션 목록 조회(진행완료)
+- Endpoint: GET /api/users/{user_id}/missions
+- Request Header: Authorization: Bearer <JWT_TOKEN>, Content-Type: application/json
+- Query String : ?status= COMPLETED
+  - Response Body : {
+      "myMissions":
+        [
+          {
+            "mission_id": 2,
+            "storeName": "금룡",
+            "name": "1인 1메뉴 주문하기",
+            "status": "COMPLETED",
+            "point": 500
+          },
+          {
+            "mission_id": 3,
+            "storeName": "좋아회",
+            "name": "매운탕 주문하기",
+            "status": "COMPLETED",
+            "point": 300
+          }
+      ]
+    }
+
+## 미션 성공 누르기
+- Endpoint: POST /api/missions/{mission_id}/complete
+- Request Header: Authorization: Bearer <JWT_TOKEN>, Content-Type: application/json
+- Query String : 
+- Response Body : {
+    "mission_id": 4,
+    "message" : "미션 성공 !",
+    "storeName": "깡통", 
+    "name": "막창 주문하기"
+  }
+
+## 회원가입 하기
+- Endpoint: GET /api/users/signup
+- Request Header: Authorization: Bearer <JWT_TOKEN>, Content-Type: application/json
+- Query String : 
+- Response Body : {
+      "name": "홍길동",
+      "nickname": "GD",
+      "gender": "M",
+      "phone_num": "010-1234-5678",
+      "birth": "1999-01-01",
+      "address": "강원도 원주시 흥업면"
+  }
+
+
+---
+
+
 ## 후기
 - API Endpoint 지정할 때 이렇게 세부적으로 설계하는지 몰랐는데 이번 학습을 통해 이런 규칙과 세부사항이 있음을 알아가는 뜻 깊은 시간이 되었다.
 - 또한 HTTP 메서드에서 어떤 메서드를 어떤 경우에 사용하는지 예를 들어 PUT 으로 업데이트를 하면 모든 리소스를 가져오기 때문에 비효율적인 경우가 많았는데 PATCH 메서드로 대체할 수 있다는 점 등 많은 것을 알아갈 수 있었다.
