@@ -81,4 +81,98 @@
 # 학습 후기
 - 스프링 기초에 대해서 더 배울 수 있게 되어서 좋았고, 이번을 통해 원래 알고 있다고 생각했던 내용에 대해서 한번 더 짚고 넘어갈 수 있게 되었다.
 - Request Header에 대한 개념이 굉장히 부족했는데 헤더에 담기는 정보가 무엇이고 어떤 형태인지 알 수 있게 되어서 API에 대한 이해도를 높일 수 있었다.
+---
+# 미션
+
+### 홈화면
+- API Endpoint | GET /user/{userId}/home
+- Request Body | 없음
+- Request Header | Authorization: Bearer {accessToken} Contestnt-Type application/json
+- query String | /user/{uesrId}/home?sort=recent
+- Path variable | {userId}
+```java
+{"message": "홈 조회 성공",
+"data": {        
+        "location": "안암동",
+        "myPoint": 999,
+        "missionCount": 7,
+        "myMissions": 
+        [ { "missionId": 1, "storeName": "반이학생마라탕", "storeType": "중식당","name": "10000원 이상의 식사시", "status": "IN_PROGRESS", "point": 500, "endDate": "2025-10-02"},
+        { "missionId": 2, "storeName": "반이학생마라탕", "storeType": "중식당","name": "10000원 이상의 식사시", "status": "IN_PROGRESS", "point": 500, "endDate": "2025-10-02"},
+        { "missionId": 3, "storeName": "반이학생마라탕", "storeType": "중식당","name": "10000원 이상의 식사시", "status": "IN_PROGRESS", "point": 500, "endDate": "2025-10-02"} ] }}
+```
+### 마이페이지 리뷰 작성
+- API Endpoint | POST /user/{userId}/reviews
+- Request Body 
+```java
+{
+    "score":5,
+    "content": "음식이 매우 맛있고 좋아요",
+    "image": [imageUrl]
+}
+```
+- Request Header | Authorization: Bearer {accessToken} Contestnt-Type application/json
+- query String | 없음
+- Path variable | {missionId} 
+### 미션 목록 조회(진행중)
+- API Endpoint | GET /users/{userId}/missions
+- Request Body | 없음
+- Request Header | Authorization: Bearer {accessToken} Contestnt-Type application/json
+- query String | /users/{userId}/missions?status=IN_PROGRESS
+- Path variable | {userId}
+```java
+{"message": "진행 미션 조회 성공",
+"data": 
+        [ { "missionId": 1, "storeName": "반이학생마라탕", "storeType": "중식당","name": "10000원 이상의 식사시", "status": "IN_PROGRESS", "point": 500, "endDate": "2025-10-02"},
+        { "missionId": 2, "storeName": "반이학생마라탕", "storeType": "중식당","name": "10000원 이상의 식사시", "status": "IN_PROGRESS", "point": 500, "endDate": "2025-10-02"},
+        { "missionId": 3, "storeName": "반이학생마라탕", "storeType": "중식당","name": "10000원 이상의 식사시", "status": "IN_PROGRESS", "point": 500, "endDate": "2025-10-02"} ] }
+```
+### 미션 목록 조회(진행 완료)
+- API Endpoint | /users/{userId}/missions
+- Request Body | 없음
+- Request Header | Authorization: Bearer {accessToken} Contestnt-Type application/json
+- query String | /users/{userId}/missions?status=COMPLETED
+- Path variable | {userId}
+```java
+{"message": "진행 끝 미션 조회 성공",
+"data": 
+        [ { "missionId": 4, "storeName": "반이학생마라탕", "storeType": "중식당","name": "10000원 이상의 식사시", "status": "CONPLETED", "point": 500, "endDate": "2025-10-01"},
+        { "missionId": 5, "storeName": "반이학생마라탕", "storeType": "중식당","name": "10000원 이상의 식사시", "status": "CONPLETED", "point": 500, "endDate": "2025-10-01"},
+        { "missionId": 6, "storeName": "반이학생마라탕", "storeType": "중식당","name": "10000원 이상의 식사시", "status": "CONPLETED", "point": 500, "endDate": "2025-10-1"} ] }
+```
+### 미션 성공 누르기
+- API Endpoint | POST /missions/{missionId}
+- Request Body | 없음
+- Request Header | Authorization: Bearer {accessToken} Contestnt-Type application/json
+- query String | 없음
+- Path variable | {missionId}
+```java
+{"message":"미션 완료",
+ "data":{
+    "storeId": 9999999
+        }       
+}
+```
+### 회원 가입 하기
+- API Endpoint | POST /auth/users
+- Request Body
+```java
+{
+  "username": "user01",
+  "password": "password123",
+  "email": "user01@example.com",
+  "nickname": "홍길동"
+}
+```
+- Request Header | Contestnt-Type: application/json
+- query String | 없음
+- Path variable | 없음
+```java
+{
+  "userId": 1,
+  "username": "user01",
+  "nickname": "홍길동",
+  "createdAt": "2025-10-02"
+}
+```
 
