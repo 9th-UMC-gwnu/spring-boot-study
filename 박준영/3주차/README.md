@@ -149,21 +149,21 @@
       "email": "honggd@gmail.com",
       "myMissions": [
         {
-          "mission_id": 1,
+          "missionId": 1,
           "storeName": "명륜진사갈비",
           "name": "4인 이상 식사하러 가기",
           "status": "IN_PROGRESS",
           "point": 700
         },
         {
-          "mission_id": 2,
+          "missionId": 2,
           "storeName": "금룡",
           "name": "1인 1메뉴 주문하기",
           "status": "COMPLETED",
           "point": 500
         },
         {
-          "mission_id": 3,
+          "missionId": 3,
           "storeName": "좋아회",
           "name": "매운탕 주문하기",
           "status": "COMPLETED",
@@ -199,7 +199,7 @@
     "myMissions":
     [
       {
-        "mission_id": 1,
+        "missionId": 1,
         "storeName": "명륜진사갈비",
         "name": "4인 이상 식사하러 가기",
         "status": "IN_PROGRESS",
@@ -216,14 +216,14 @@
       "myMissions":
         [
           {
-            "mission_id": 2,
+            "missionId": 2,
             "storeName": "금룡",
             "name": "1인 1메뉴 주문하기",
             "status": "COMPLETED",
             "point": 500
           },
           {
-            "mission_id": 3,
+            "missionId": 3,
             "storeName": "좋아회",
             "name": "매운탕 주문하기",
             "status": "COMPLETED",
@@ -237,7 +237,7 @@
 - Request Header: Authorization: Bearer <JWT_TOKEN>, Content-Type: application/json
 - Query String : 
 - Response Body : {
-    "mission_id": 4,
+    "missionId": 4,
     "message" : "미션 성공 !",
     "storeName": "깡통", 
     "name": "막창 주문하기"
@@ -251,7 +251,7 @@
       "name": "홍길동",
       "nickname": "GD",
       "gender": "M",
-      "phone_num": "010-1234-5678",
+      "phoneNum": "010-1234-5678",
       "birth": "1999-01-01",
       "address": "강원도 원주시 흥업면"
   }
