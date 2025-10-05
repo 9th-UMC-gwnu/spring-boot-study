@@ -1,0 +1,75 @@
+# 객체 지향 언어와 관계형 데이터베이스
+
+## 패러다임의 불일치
+
+- 객체 지향에서는 연관관계의 주인을 명시해야 한다.
+- 객체 지향 언어에서는 상속이 기본 개념이지만, RDB에는 상속 개념이 없다.
+
+# JPA란?
+
+- 자바 진영에서 ORM 기술의 표준으로 사용되는 인터페이스의 모음.
+
+> ORM(Object Relational Mapping)이란?
+> - 애플리케이션의 클래스와 RDB의 테이블을 매핑하는 기술.
+> - JPA를 구현한 대표적인 오픈 소스로는 Hibernate가 있다.
+
+# Spring 프로젝트 설계 및 구조
+
+> 대표적으로 많이 사용하는 프로젝트 구조
+> - 파사드 패턴 구조
+> - 도메인형 구조
+> - 계층형 구조
+> - 헥사고날 구조 
+
+# Entity Mapping
+
+> 어노테이션 종류
+> - @Entity
+> - @Table 
+> - @Id 
+> - @GeneratedValue 
+> - @Column 
+> - @Enumerated
+
+## cascade 옵션
+
+- CascadeType.ALL: 모든 상태 변화(영속, 병합, 삭제 등)가 전파됨
+- CascadeType.PERSIST: 영속 상태로 변경될 때 전파됨
+- CascadeType.MERGE: 병합 상태로 변경될 때 전파됨
+- CascadeType.REMOVE: 삭제 상태로 변경될 때 전파됨
+- CascadeType.REFRESH: 새로 고침 상태로 변경될 때 전파됨
+- CascadeType.DETACH: 분리 상태로 변경될 때 전파됨
+
+# 핵심 키워드
+
+- 계층형 구조 vs 도메인형 구조
+    - 계층형 구조
+        - Controller → Service → Repository 형태의 전통적 3계층 구조.
+    - 도메인형 구조
+        - 도메인 단위로 묶는 구조.
+
+- JPA
+    - JPA는 **객체와 RDB 간의 패러다임 불일치**를 해결하기 위한 ORM 표준.
+    - 유명한 구현체로는 Hibernate가 있다.
+
+- N+1 문제
+    - 한 번의 쿼리(N=1)로 가져온 후, 그 결과의 각 연관 객체를 조회하기 위해 N개의 추가 쿼리가 발생하는 문제.
+    - 발생 원인
+        - @ManyToOne, @OneToMany 등 **지연 로딩(LAZY)** 연관관계에서 발생.
+        - 영속성 컨텍스트가 각 연관 객체를 개별 쿼리로 불러올 때 발생.
+    - 해결 방법
+
+  | **Fetch Join** | JPQL에서 join fetch 사용 → 한 번에 연관 객체까지 조회 |
+  | --- | --- |
+  | **EntityGraph** | 스프링 데이터 JPA 제공 기능. fetch join과 유사 |
+  | **BatchSize** | 여러 개의 연관 객체를 IN 쿼리로 한 번에 로딩 (hibernate.default_batch_fetch_size) |
+  | **DTO Projection** | 필요한 데이터만 select 하는 구조로 변경 |
+- 기본 키 생성 전략
+
+  JPA의 @GeneratedValue로 PK 생성 방식을 지정.
+
+  | **IDENTITY** | DB의 AUTO_INCREMENT 사용 |
+  | --- | --- |
+  | **SEQUENCE** | 시퀀스 객체를 통해 식별자 생성 |
+  | **TABLE** | 별도의 테이블로 시퀀스 흉내냄 |
+  | **AUTO** | DB 방언(Dialect)에 따라 자동 선택 |
