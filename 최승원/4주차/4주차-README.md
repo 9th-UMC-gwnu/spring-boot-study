@@ -82,13 +82,14 @@
 
 ## ERD 사진:
 
-![스크린샷 2025-10-05 22.18.51.png](/Users/seungwon-choi/Desktop/스크린샷 2025-10-05 22.21.06.png)
+<img width="948" height="733" alt="스크린샷 2025-10-05 22 21 06" src="https://github.com/user-attachments/assets/28ea949e-4cab-4b89-9e3d-c7bc23e0e6ba" />
+
 
 ## DB 사진
 
 ### 구조:
 
-![스크린샷 2025-10-05 22.18.24.png](/Users/seungwon-choi/Desktop/스크린샷 2025-10-05 22.18.24.png)
+<img width="218" height="219" alt="스크린샷 2025-10-05 22 18 24" src="https://github.com/user-attachments/assets/0c467543-e09a-4d2e-a9fa-d3d51acb7b0c" />
 
 ### 각 테이블 DDL
 ```sql
