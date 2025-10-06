@@ -99,3 +99,32 @@
 # 학습 후기
 
 - JPA의 영속성 컨텍스트와 JPQL, QueryDSL에 대해 깊이 있게 학습할 수 있어서 좋았습니다. 특히, N+1 문제와 이를 해결하는 다양한 방법들을 이해하는 데 큰 도움이 되었습니다. 앞으로도 이러한 개념들을 실제 프로젝트에 적용해보며 경험을 쌓아가고 싶습니다.
+
+# 미션
+
+```java
+public interface Chapter5MissionRepository {
+
+    // 리뷰 작성 쿼리
+    @Query("insert into Review(memberId, rating, content) values (:memberId, :rating, :content)")
+    void saveReview(@Param("memberId")Long memberId, @Param("rating") int rating, @Param("content") String content);
+
+    // 마이페이지 조회 쿼리
+    @Query("select m from Member m where m.id = :memberId")
+    Member findMemberById(@Param("memberId")Long memberId);
+
+    // 진행 중, 진행 완료 미션 조회 쿼리
+    @Query("select m from Mission m where m.memberId = :memberId")
+    Page<Mission> findMissionsByMemberId(@Param("memberId")Long memberId, Pageable pageable);
+
+    // 홈 화면 쿼리
+    @Query("""
+            select new HomeResponse (m.id, s.name, s.category, m.title, m.date, m.status, m.point)
+                            from Mission m
+                            join m.store s
+                            where m.memberId = :memberId
+                            order by m.date desc
+            """)
+    List<HomeResponse> findHomeByMemberId(@Param("memberId")Long memberId);
+}
+```
