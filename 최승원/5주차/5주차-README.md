@@ -1,0 +1,130 @@
+# Spring Data JPA 영속성 컨텍스트
+
+- 데이터를 영구적으로 저장할 엔티티 객체를 관리하고, 변경 내용을 추적하는 메모리 상의 논리적 공간이다.
+- 일종의 캐시 메모리이다.
+
+## 영속성이란?
+
+- 비영속: 영속성 컨텍스트와 관련 없는 새로운 상태
+- 영속: 영속성 컨텍스트에 관리되는 상태
+- 준영속: 영속성 컨텍스트에 저장되었다가 분리된 상태
+- 삭제: 영속성 컨텍스트에서 삭제된 상태
+
+## 영속 상태이면 좋은 이유
+
+- 1차 캐시
+- 변경 감지
+- 지연 로딩
+- 쓰기 지연
+
+## N + 1 문제
+
+- 1개의 쿼리를 실행한 후에, 관련된 N개의 쿼리를 추가로 실행하는 문제
+
+# JPQL
+
+- JPA의 일부로, 쿼리를 데이터베이스의 테이블이 아닌 JPA 엔티티, 즉 ’객체‘를 대상으로 작성하는 객체 지향 쿼리 언어.
+
+## Query method
+
+- Spring Data JPA가 메서드 이름을 기반으로 자동 쿼리 생성 기능 제공
+
+## @Query
+
+- JPQL을 직접 작성하는 방법.
+- nativeQuery = true 옵션을 사용하면, 네이티브 SQL 쿼리를 작성할 수 있다.
+
+# QueryDSL
+
+- 타입 안전성을 보장하는 자바 기반의 쿼리 빌더
+
+## 동적 쿼리란?
+
+- 실행 시점에 쿼리의 일부가 변경될 수 있는 쿼리
+- 요구사항에 따라 쿼리의 조건 혹은 구조가 유동적으로 조정되어야 하는 경우에 사용한다.
+
+# 핵심 키워드
+
+- **지연로딩과 즉시로딩의 차이**
+    - 지연 로딩
+        - 엔티티를 조회할 때, 연관 엔티티를 필요할 때 조회한다.
+    - 즉시 로딩
+        - 엔티티를 조회할 때, 연관 엔티티를 즉시 조회한다.
+
+- **JPQL**
+    - JPA가 제공하는 객체지향 쿼리 언어.
+    - SQL과 달리 엔티티 객체를 대상으로 쿼리를 작성한다.
+    - 실행 시, SQL로 변환된다.
+
+- **Fetch Join**
+    - N + 1 문제를 해결하기 위한 핵심 수단.
+    - 엔티티를 조회할 때, 연관된 엔티티를 한 번의 쿼리로 함께 가져오는 조인 방식.
+    - 단순 join과 달리 엔티티 그래프 자체를 함께 로드한다.
+
+- **@EntityGraph**
+    - **JPQL 수정 없이** Fetch Join 효과를 주는 어노테이션.
+
+- **commit과 flush 차이점**
+
+    | **구분** | **flush** | **commit** |
+    | --- | --- | --- |
+    | 시점 | 영속성 컨텍스트 → DB 반영 (SQL 실행) | 트랜잭션 종료, 실제 DB 반영 확정 |
+    | 동작 | **쓰기 지연 SQL 저장소**의 쿼리를 실행 | DB 트랜잭션을 커밋 |
+    | 역할 | 영속성 컨텍스트의 변경 사항을 **DB에 반영만** | 반영된 변경 사항을 **확정(commit)** |
+
+- **QueryDSL, OpenFeign의 QueryDSL**
+    - 기존의 QueryDSL은 죽었다. 5.1.0이 마지막 릴리즈.
+    - 이 프로젝트를 OpenFeign 팀이 레포지토리를 포크하여 계속 릴리즈 중.
+
+- **N+1 문제 해결할 수 있는 여러 방안들**
+
+    | **방법** | **설명** | **비고** |
+    | --- | --- | --- |
+    | Fetch Join | 한 번의 SQL로 연관 데이터 함께 조회 | 가장 일반적 |
+    | @EntityGraph | Repository 수준에서 Fetch Join 대체 | 깔끔한 선언형 |
+    | BatchSize 설정 | IN 절로 묶어서 가져오기 (@BatchSize(size = n)) | Collection 연관관계에 효과적 |
+    | DTO 직접 조회 | 필요한 데이터만 JPQL로 가져오기 | 복잡한 조회 성능 최적화 |
+    | 캐시 사용 | 2차 캐시 or Redis 등 활용 | 반복 조회 성능 개선 |
+    | CQRS 분리 | 조회 전용 QueryRepo로 쿼리 최적화 | 확장성 있는 설계 |
+
+- **영속 상태의 종류**
+
+    | **상태** | **설명** |
+    | --- | --- |
+    | **비영속(new)** | 영속성 컨텍스트에 관리되지 않음 |
+    | **영속(managed)** | em.persist() 호출로 관리 시작 |
+    | **준영속(detached)** | em.detach(), em.clear() 등으로 관리 종료 |
+    | **삭제(removed)** | em.remove() 호출 후 commit 시 DB 삭제 |
+
+# 학습 후기
+
+- JPA의 영속성 컨텍스트와 JPQL, QueryDSL에 대해 깊이 있게 학습할 수 있어서 좋았습니다. 특히, N+1 문제와 이를 해결하는 다양한 방법들을 이해하는 데 큰 도움이 되었습니다. 앞으로도 이러한 개념들을 실제 프로젝트에 적용해보며 경험을 쌓아가고 싶습니다.
+
+# 미션
+
+```java
+public interface Chapter5MissionRepository {
+
+    // 리뷰 작성 쿼리
+    @Query("insert into Review(memberId, rating, content) values (:memberId, :rating, :content)")
+    void saveReview(@Param("memberId")Long memberId, @Param("rating") int rating, @Param("content") String content);
+
+    // 마이페이지 조회 쿼리
+    @Query("select m from Member m where m.id = :memberId")
+    Member findMemberById(@Param("memberId")Long memberId);
+
+    // 진행 중, 진행 완료 미션 조회 쿼리
+    @Query("select m from Mission m where m.memberId = :memberId")
+    Page<Mission> findMissionsByMemberId(@Param("memberId")Long memberId, Pageable pageable);
+
+    // 홈 화면 쿼리
+    @Query("""
+            select new HomeResponse (m.id, s.name, s.category, m.title, m.date, m.status, m.point)
+                            from Mission m
+                            join m.store s
+                            where m.memberId = :memberId
+                            order by m.date desc
+            """)
+    List<HomeResponse> findHomeByMemberId(@Param("memberId")Long memberId);
+}
+```
