@@ -183,96 +183,130 @@ ON users (name, email);
 # 미션
 
 ## 설계한 ERD
-<img width="1181" height="888" alt="스크린샷 2025-09-18 20 40 30" src="https://github.com/user-attachments/assets/5b4f3d0e-9c04-4673-94c6-d2b607fe0c45" />
+
+<img width="941" height="893" alt="스크린샷 2025-10-10 12 06 38" src="https://github.com/user-attachments/assets/0a5f7e09-94b5-44f4-910f-eef9477b23c8" />
 
 ## DDL 작성
 ```sql
-# --- users ---
-create table if not exists users
+# --- members ---
+create table if not exists members
 (
-    id           bigint auto_increment primary key   not null comment '사용자 PK',
+    member_id    bigint auto_increment primary key   not null,
     name         varchar(20)                         not null,
-    nickname     varchar(20)                         not null,
     gender       varchar(10)                         not null,
-    status       varchar(10)                         not null,
-    inactived_at timestamp                           not null,
+    birth        varchar(10)                         not null,
+    address      varchar(100)                        not null,
+    point        int                                 not null,
+    email        varchar(50)                         not null,
+    phone_number varchar(20)                         not null,
     created_at   timestamp default CURRENT_TIMESTAMP not null comment '데이터 생성일자',
     updated_at   timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP comment '데이터 수정일자',
 
     constraint chk_gender
-    check ( gender in ('남', '여') ),
+        check ( gender in ('남', '여') )
+);
 
-    constraint chk_status
-    check ( status in ('active', 'inactive'))
-    );
-
-# --- rents ---
-create table if not exists rents
+# --- missions ---
+create table if not exists missions
 (
-    id         bigint auto_increment primary key   not null,
-    user_id    bigint                              not null,
-    book_id    bigint                              not null,
+    mission_id  bigint auto_increment primary key   not null,
+    store_id    bigint                              not null,
+    deadline    date                                not null,
+    conditional varchar(100)                        not null,
+    point       int                                 not null,
+    created_at  timestamp default CURRENT_TIMESTAMP not null comment '데이터 생성일자'
+);
+
+create table if not exists member_missions
+(
+    member_mission_id bigint auto_increment primary key not null,
+    member_id         bigint                            not null,
+    mission_id        bigint                            not null,
+    is_completed      boolean default false             not null,
+
+    constraint fk_member_missions_to_members foreign key (member_id) references members (member_id),
+    constraint fk_member_missions_to_missions foreign key (mission_id) references missions (mission_id)
+);
+
+# --- stores ---
+create table if not exists stores
+(
+    store_id       bigint auto_increment primary key not null,
+    location_id    bigint                            not null,
+    name           varchar(50)                       not null,
+    manager_number bigint                            not null,
+    address        varchar(100)                      not null,
+
+    constraint fk_stores_to_locations foreign key (location_id) references locations (location_id)
+);
+
+# --- locations ---
+create table if not exists locations
+(
+    location_id bigint auto_increment primary key not null,
+    name        varchar(50)                       not null
+);
+
+# --- reviews ---
+create table if not exists reviews
+(
+    review_id  bigint auto_increment primary key   not null,
+    member_id  bigint                              not null,
+    store_id   bigint                              not null,
+    content    varchar(255)                        not null,
+    rating     float                               not null,
     created_at timestamp default CURRENT_TIMESTAMP not null comment '데이터 생성일자',
-    updated_at timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP comment '데이터 수정일자',
 
-    constraint fk_rents_to_users foreign key (user_id) references users (id),
-    constraint fk_rents_to_books foreign key (book_id) references books (id)
-    );
+    constraint fk_reviews_to_members foreign key (member_id) references members (member_id),
+    constraint fk_reviews_to_stores foreign key (store_id) references stores (store_id),
 
-# --- books ---
-create table if not exists books
+    constraint chk_rating
+        check ( rating >= 0 and rating <= 5 )
+);
+
+# --- answers ---
+create table if not exists answers
 (
-    id          bigint auto_increment primary key   not null,
-    category_id bigint                              not null,
-    title       varchar(50)                         not null,
-    description varchar(500)                        not null,
-    created_at  timestamp default CURRENT_TIMESTAMP not null comment '데이터 생성일자',
-    updated_at  timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP comment '데이터 수정일자',
+    answer_id bigint auto_increment primary key not null,
+    review_id bigint                            not null,
+    content   varchar(255)                      not null,
 
-    constraint fk_books_to_categorys foreign key (category_id) references categorys (id)
-    );
+    constraint fk_answers_to_reviews foreign key (review_id) references reviews (review_id)
+);
 
-# --- categorys ---
-create table if not exists categorys
+# --- terms ---
+create table if not exists terms
 (
-    id         bigint auto_increment primary key   not null,
-    name       varchar(20)                         not null,
-    created_at timestamp default CURRENT_TIMESTAMP not null comment '데이터 생성일자',
-    updated_at timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP comment '데이터 수정일자'
-    );
+    term_id bigint auto_increment primary key not null,
+    name    varchar(100)                      not null
+);
 
-# --- book_hash_tags ---
-create table if not exists book_hash_tags
+# --- member_terms ---
+create table if not exists member_terms
 (
-    id          bigint auto_increment primary key not null,
-    book_id     bigint                            not null,
-    hash_tag_id bigint                            not null,
+    member_term_id bigint auto_increment primary key not null,
+    member_id      bigint                            not null,
+    term_id        bigint                            not null,
 
-    constraint fk_book_hash_tags_to_books foreign key (book_id) references books (id),
-    constraint fk_book_hash_tags_to_tags foreign key (hash_tag_id) references hash_tags (id)
-    );
+    constraint fk_member_terms_to_members foreign key (member_id) references members (member_id),
+    constraint fk_member_terms_to_terms foreign key (term_id) references terms (term_id)
+);
 
-# --- hash_tags ---
-create table if not exists hash_tags
+# --- foods ---
+create table if not exists foods
 (
-    id         bigint auto_increment primary key   not null,
-    name       varchar(20)                         not null,
-    created_at timestamp default CURRENT_TIMESTAMP not null comment '데이터 생성일자',
-    updated_at timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP comment '데이터 수정일자'
-    );
+    food_id bigint auto_increment primary key not null,
+    name    varchar(50)                       not null
+);
 
-# --- alarms ---
-create table alarms
+# --- member_foods ---
+create table if not exists member_foods
 (
-    id          bigint auto_increment primary key   not null,
-    user_id     bigint                              not null,
-    type        varchar(20)                         not null,
-    title       varchar(50)                         not null,
-    description varchar(500)                        not null,
-    created_at  timestamp default CURRENT_TIMESTAMP not null comment '데이터 생성일자',
+    member_food_id bigint auto_increment primary key not null,
+    member_id      bigint                            not null,
+    food_id        bigint                            not null,
 
-    constraint chk_type check ( type in ('notice', 'marketing')),
-
-    constraint fk_alarms_to_users foreign key (user_id) references users (id)
+    constraint fk_member_foods_to_members foreign key (member_id) references members (member_id),
+    constraint fk_member_foods_to_foods foreign key (food_id) references foods (food_id)
 );
 ```
