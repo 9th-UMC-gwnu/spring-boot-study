@@ -109,3 +109,10 @@
 
 - 프로젝트 구조에서 항상 갈팡질팡하였는데 도메인 중심, 계층 중심 등의 다양한 방식이 있음을 알아 도움이 되었다.
 - N+1 문제라는 것을 알아감으로써 Getter를 사용할 때도 신중하게 써야하겠다는 것을 익힐 수 있었다.
+
+
+---
+
+# 미션
+
+[GitHub - nemm3623/UMC-chapter4-mission] (https://github.com/nemm3623/UMC-chapter4-mission)
