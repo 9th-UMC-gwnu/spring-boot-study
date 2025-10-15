@@ -57,7 +57,7 @@
      - 초반 설계가 조금 복잡하고, 도메인 경계를 잘 나눠야 한다
 - JPA : 자바 객체를 DB 테이블에 매핑해주는 ORM 기술의 표준으로 객체 지향과 RDB간의 패러다임 불일치를 해결
 - N+1 문제 : 데이터를 조회할 때 연관된 데이터를 N번 추가 조회하는 문제
-   - JPA의 지연 로딩(LAZY) 떄문에 연관된 엔티티를 필요할 떄마다 쿼리로 부름
+   - JPA의 지연 로딩(LAZY) 때문에 연관된 엔티티를 필요할 때 마다 쿼리로 부름
    - Fetch Join, EntitiyGraph, 즉시로딩인 EAGER(권장 X)로 해결 가능
 - 기본 키 생성 전략 : JPA는 @GeneratedValue를 이용해 엔티티의 PK를 자동 생성할 수 있게 해준다
   - IDENTITY : DB의 AUTO_INCREMENT 사용
@@ -65,3 +65,11 @@
   - TABLE : 별도의 키 관리용 테이블 생성
   - AUTO : DB 종류에 따라 자동 선택
 
+# 미션
+링크 : https://github.com/hyukkimm/UMC/tree/main/Chapter4/umc
+ERD
+<img width="1180" height="642" alt="umc_ch0실습" src="https://github.com/user-attachments/assets/f778eb6d-bf63-4df1-8fc5-e0d12789783a" />
+
+# 학습후기
+- 프로젝트 구조를 여러 개 알게 되어서 만들게 되면 잘 생각해서 만들어야 겠다.
+- jpa의 기초와 여러 어노테이션을 활용해 엔티티를 잘 만들어 봐야겠다.
