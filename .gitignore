@@ -1,2 +1,7 @@
 ### idea ###
 .idea
+### macOS ###
+.DS_Store
+
+### vscode ###
+.vscode/
