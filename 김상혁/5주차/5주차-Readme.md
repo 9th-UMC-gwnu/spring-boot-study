@@ -178,10 +178,79 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
   - 삭제 (removed) : 삭제된 상태
 
 # 미션
+## 리뷰 작성 쿼리
+```
+public interface ReviewRepository extends JpaRepository<Review, Long> {
 
+    @Transactional
+    @Modifying
+    @Query(value = "INSERT INTO review(user_id, store_id, star, content, created_at) VALUES (:userId, :storeId, :star, :content, :createdAt)", nativeQuery = true)
+    void insertReview(
+            @Param("userId") Long userId,
+            @Param("storeId") Long storeId,
+            @Param("star") Float star,
+            @Param("content") String content,
+            @Param("createdAt") LocalDateTime createdAt
+    );
+}
+```
+## 마이페이지 쿼리
+```
+public interface UserRepository extends JpaRepository<User, Long> {
 
+    // 메서드 이름 기반 조회 가능
+    Optional<User> findById(Long id);
 
+    // @Query 방식
+    @Query("SELECT u FROM User u WHERE u.id = :userId")
+    User findUserById(@Param("userId") Long userId);
+}
+```
+## 내가 진행중, 진행 완료한 미션 보는 쿼리
+```
 
+public interface UserMissionRepository extends JpaRepository<UserMission, Long> {
+
+    // 유저의 진행 중인 미션 조회
+    Page<UserMission> findByUserAndIsSuccessFalse(User user, Pageable pageable);
+
+    // 유저의 완료된 미션 조회
+    Page<UserMission> findByUserAndIsSuccessTrue(User user, Pageable pageable);
+
+    // 특정 유저의 모든 미션 조회
+    Page<UserMission> findByUser(User user, Pageable pageable);
+}
+```
+## 홈 화면 쿼리
+```
+public interface MissionRepository extends JpaRepository<Mission, Long> {
+
+    // 현재 선택된 지역에서 도전 가능한 미션 조회
+    @Query("SELECT m FROM Mission m WHERE m.store.location = :location")
+    Page<Mission> findMissionsByLocation(@Param("location") Location location, Pageable pageable);
+}
+
+```
+# 트러블 슈팅
+## 이슈 No.1
+**`이슈`**
+
+👉 리뷰 쿼리 작성 할 때 @Query()안에서 INSERT가 안됨
+
+**`문제`**
+
+👉 @Query는 기본적으로 SELECT,DELETE,UPDATE만 지원
+
+**`해결`**
+
+👉  @Modifying 과 @Query안에 nativeQuery = true 추가
+
+**`참고레퍼런스`**
+
+- [https://kitty-geno.tistory.com/118]
+
+# 학습 후기
+- 영속성 콘텍스트를 왜 쓰는지 정확히 몰랐는데 장점을 알게되었고 JPQL을 직접 사용해보니 Spring boot가 편하다고 느꼈다. 
 
 
 
