@@ -144,6 +144,13 @@
     | **삭제**    | DB에서 삭제 예정인 상태          |
 
 
+
+---
+
+# 미션
+
+- 미션 링크 (https://github.com/nemm3623/UMC-chapter4-mission/tree/Feat/Chapter5/src/main/java/com/example/umcchapter5mission)
+
 ---
 
 
