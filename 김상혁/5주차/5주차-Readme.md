@@ -178,6 +178,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
   - 삭제 (removed) : 삭제된 상태
 
 # 미션
+- Repository 링크 : https://github.com/hyukkimm/UMC/tree/Feat/Chapter5/Repository
 ## 리뷰 작성 쿼리
 ```
 public interface ReviewRepository extends JpaRepository<Review, Long> {
