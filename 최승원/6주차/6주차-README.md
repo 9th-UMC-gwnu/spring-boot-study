@@ -36,3 +36,76 @@
 
 - 기존 QueryDSL 프로젝트는 마지막 릴리즈가 2024년이다.
 - OpenFeign 팀이 레포지토리를 Fork 하여 심폐소생술하는 중이다.
+
+# 핵심 키워드
+- QueryDSL에서 FetchJoin 하는 법
+```java
+List<Member> members = queryFactory
+    .selectFrom(member)
+    .join(member.team, team).fetchJoin()
+    .where(team.name.eq("백엔드팀"))
+    .fetch();
+```
+
+- DTO 매핑 방식 (+DTO안에 DTO)
+```java
+List<MemberDto> result = queryFactory
+    .select(Projections.constructor(MemberDto.class,
+        member.username,
+        Projections.constructor(TeamDto.class, team.name)
+    ))
+    .from(member)
+    .join(member.team, team)
+    .fetch();
+```
+
+- 커스텀 페이지네이션
+```java
+List<MemberDto> content = queryFactory
+    .select(new QMemberDto(member.username, team.name))
+    .from(member)
+    .leftJoin(member.team, team)
+    .offset(pageable.getOffset())
+    .limit(pageable.getPageSize())
+    .fetch();
+
+long total = queryFactory
+    .select(member.count())
+    .from(member)
+    .fetchOne();
+
+return new PageImpl<>(content, pageable, total);
+```
+
+- transform - groupBy
+  - 1:N 관계에서 하나의 부모에 여러 자식 데이터를 매핑하기 위한 QueryDSL의 집계 도구.
+  - SQL의 group by가 아니라, Java 메모리 내에서의 그룹핑 변환이다.
+```java 
+Map<Long, MemberGroupDto> result = queryFactory
+  .from(member)
+  .join(member.team, team)
+  .transform(
+      groupBy(team.id).as(
+          new QMemberGroupDto(
+              team.name,
+              list(new QMemberDto(member.username))
+          )
+      )
+  );
+
+List<MemberGroupDto> groups = new ArrayList<>(result.values());
+```
+
+- order by null
+  - MySQL에서는 ORDER BY NULL을 사용해 정렬 연산을 완전히 제거할 수 있다.
+```java
+queryFactory
+    .select(member.username)
+    .from(member)
+    .orderBy(Expressions.stringTemplate("null").asc())
+    .fetch();
+```
+
+# 후기
+- QueryDSL에 대해 파악하지 못했던 부분을 많이 알게 되었다.
+- QueryDSL이 사실상 유지보수가 중단된 상태라 아쉽다는 생각이 들었고, 오픈소스 프로젝트가 지속되기 위해서는 커뮤니티의 관심과 기여가 중요하다는 점을 다시금 깨달았다.
