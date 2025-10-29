@@ -55,15 +55,41 @@
 
 # 핵심 키워드
 - QueryDSL에서 FetchJoin 하는법
+  - ```
+    queryFactory
+    .selectFrom(주_엔티티)
+    .join(연관_엔티티, 별칭).fetchJoin() << 조인다음에 사용  
+    .where(조건)
+    .fetch();
+    ```
+    이렇게 .join다음fetchJoin을 해준다. 
 - DTO 매핑 방식(+DTO 안에 DTO)
+  - ```
+    public class MemberDto {
+    private Long id;
+    private String name;
+    }
+    public class ReviewDto {
+    private Long ReviewId;
+    private MemberDto member;  ***
+    private float star;
+    }
+    ```
+    ReviewDto에 필요한 정보인 member의 정보를 MemberDto로 받아서 넣는다. 
 - 커스텀 페이지네이션
+  - 직접 offset과 limit을 지정해서 페이지 단위로 조회 할 수 있는 기능이다.
+  - queryfactory.~.offset(page * size).limit(size) 를 통해 시작페이지와 가져올 페이지를 지정할 수 있다.
 - transform - groupBy
+  - SQL GROUP BY처럼 데이터를 그룹핑하면서, DTO나 Map 형태로 바로 변환한다. 일반 fetch()는 리스트만 반환하지만, transform(groupBy(...).as(...))를 쓰면 그룹별로 묶인 Map/DTO를 만들 수 있음
 - order by null
+  - Join이나 페이징 시 불필요한 정렬이 있을 수 있는데, 이 때 order by null을 사용하면 정렬하지 않고 데이터를 가져온다.
+# 미션
+주소 : https://github.com/hyukkimm/UMC/tree/Feat/Chapter6
+테스트
+<img width="583" height="216" alt="6주차 test" src="https://github.com/user-attachments/assets/f0412660-ca7c-4a2d-8790-299774a881bb" />
 
-
-
-
-
+# 후기
+- builder를 통해 동적으로 쿼리를 조정해서 하나의 API로 여러 조건 처리가 가능한 점이 매우 편리하다고 생각했다. 테스트 코드를 통해 직접 결과를 보니까 수정하기 편했다.   
 
 
 
