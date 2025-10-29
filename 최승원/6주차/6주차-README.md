@@ -109,3 +109,7 @@ queryFactory
 # 후기
 - QueryDSL에 대해 파악하지 못했던 부분을 많이 알게 되었다.
 - QueryDSL이 사실상 유지보수가 중단된 상태라 아쉽다는 생각이 들었고, 오픈소스 프로젝트가 지속되기 위해서는 커뮤니티의 관심과 기여가 중요하다는 점을 다시금 깨달았다.
+
+# 미션
+
+링크 - [6주차 미션 PR 링크](https://github.com/chltjsdl0119/UMC-chapter4-mission/pull/1)
