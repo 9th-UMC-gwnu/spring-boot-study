@@ -64,5 +64,7 @@ List<Member> findByNameAndDeletedAtIsNull(String name);
 # 학습 후기
 - QueryDSL로 조건을 조합하면서 동적 쿼리가 깔끔해지는 것에 만족했다.
 
+<br>
+
 # 미션
 - https://github.com/sungw00ng/UMC-week-mission
