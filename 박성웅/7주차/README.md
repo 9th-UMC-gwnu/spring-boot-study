@@ -145,7 +145,11 @@
 - 실무를 하게 된다면 에러 코드와 메시지의 체계적 관리가 필요하겠구나 생각이 들었습니다.
 
 # 🔥 미션
-- 1. RestControllerAdvice의 장점, 그리고 없을 경우 어떤 점이 불편한지도 조사하여 미션 기록란에 기재하기
-- 2. 지금까지 진행하면서 작성한 API들 모두 응답통일 처리하기
-- 3. 성공 메서드, 성공 Enum 제작하기
+https://github.com/sungw00ng/UMC-week-mission/tree/FEAT/Chapter7
+####  1. RestControllerAdvice의 장점, 그리고 없을 경우 어떤 점이 불편한지도 조사하여 미션 기록란에 기재하기
+####  2. 지금까지 진행하면서 작성한 API들 모두 응답통일 처리하기
+#### 3. 성공 메서드, 성공 Enum 제작하기
 
+# 💪 미션 기록
+- RestControllerAdvice가 없다면 각 컨트롤러 메서드마다 try {…} catch (Exception e) {…}를 달아야하는 불편함이 있음
+- 반면에, RestControllerAdvice가 있다면 하나의 클래스 (GlobalExceptionHandler)로 여러 종류의 예외를 한꺼번에 처리.
