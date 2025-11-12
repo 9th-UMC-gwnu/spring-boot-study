@@ -40,3 +40,6 @@
     2. DTO의 각 필드에 선언된 제약 조건(@NotNull, @Size 등)을 확인.
     3. 하나라도 위반되면 ConstraintViolationException 또는 MethodArgumentNotValidException을 던짐.
     4. @ExceptionHandler나 @ControllerAdvice로 이를 처리해 사용자 친화적인 응답을 생성.
+
+# 미션 
+[8주차 미션 레포지토리](https://github.com/chltjsdl0119/UMC-chapter4-mission)
