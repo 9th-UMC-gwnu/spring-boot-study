@@ -235,4 +235,4 @@ public class GeneralExceptionAdvice {
 전역 예외 처리와 발리데이션, swagger 세팅 등을 위한 한걸을을 뗀 느낌이라 인상깊었던 것 같습니다....
 
 ### 미션 링크
-[8주차 미션 브랜치 링크]()
+[8주차 미션 브랜치 링크](https://github.com/hexter31376/umc_mission4/tree/study/Chapter7)
