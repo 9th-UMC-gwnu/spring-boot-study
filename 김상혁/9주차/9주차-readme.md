@@ -38,7 +38,6 @@
 - 객체 그래프 탐색
   - 엔티티가 연관된 객체를 점(.)으로 계속 따라가며 탐색하는 것 
   - 예시 : user.getReviews().get(0).getStore().getName();
-  - 
 ## 미션
 [9주차 미션](https://github.com/hyukkimm/UMC/tree/Feat/Chapter9)
 
