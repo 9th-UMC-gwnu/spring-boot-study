@@ -39,7 +39,7 @@
    위 코드에 대한 설명
   - @Operation: API 설명을 작성, summary에 API 제목 description에 API 설명을 작성
   - @ApiResponse: 코드와 응답 메시지를 작성
-  - @ApiResponses: @ApiResponse를 묶음
+- @ApiResponses: @ApiResponse를 묶음
   - 여기서 이부분을 EKfh Docs 전용 파일로 만들어서 작성가능
 ---
 # 서비스 매서드 로직 작성
