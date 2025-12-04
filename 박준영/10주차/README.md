@@ -68,7 +68,7 @@ ProviderManager는
 
 ---
 
-## 5. AuthenticationProvider → UserDetailsService 호출 (번호 5)
+## 5. AuthenticationProvider → UserDetailsService 호출 
 
 DB 기반 인증일 경우 `DaoAuthenticationProvider`가 선택되고,
 
@@ -79,7 +79,7 @@ DB에서 User를 찾아오라고 시킴.
 
 ---
 
-## 6. UserDetailsService가 UserDetails 반환 (번호 6)
+## 6. UserDetailsService가 UserDetails 반환
 
 UserDetailsService는 DB를 조회해서
 
@@ -188,13 +188,11 @@ SecurityContextHolder.getContext().setAuthentication(authentication);
 | **사용자 수 많을 때** | 적합                             | 부적합(세션 저장 공간 부담 큼)                  |
 | **모바일 앱**      | 매우 적합                          | 부적합                                 |
 
-
 ---
 
 # 학습 후기
 
 - 스프링 시큐리티에 대해 많이 부족함을 느끼는 기회가 되었다.
-
 
 --- 
 
