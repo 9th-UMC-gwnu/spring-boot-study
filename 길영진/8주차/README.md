@@ -73,8 +73,8 @@ public ResponseEntity<String> createUser(@Valid @RequestBody UserDto user) {
 </div>
 
 # 학습 후기
-- QueryDSL을 활용하면 타입 안전성과 자동완성을 통해 동적 쿼리를 훨씬 직관적으로 작성할 수 있다는 것을 알게 되었다.
-- 특히 transform과 groupBy를 이용한 DTO 매핑과 커스텀 페이지네이션 방식이 실무에서 유용하게 쓰일 것 같다.
+- Swagger를 통한 API 문서화 및 테스트의 편리성을 이해하고, 유효성 검사의 중요성과 동작 원리를 숙지했습니다.
+- Java 예외의 두 가지 주요 종류와 주요 실행 예외의 발생 상황 및 개념을 명확히 파악했습니다.
 # 미션
 ### 1주차 사진
  <img alt="erd0" src="https://github.com/mybookG/image/blob/main/erd0.png?raw=true" />
